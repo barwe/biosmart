@@ -20,7 +20,8 @@ export function getRest<T extends { id: number }>(
 
   const list = async (params?: QueryParams) => {
     const r = await api.get<T[]>(`${prefix}/`, { params })
-    return r.data
+    // return r.data
+    return r.data.data.rows
   }
 
   const predata = async <R = SARecord>(keys?: string[]) => {
@@ -43,21 +44,21 @@ export function getRest<T extends { id: number }>(
   const destroy = async (id: number | string, log?: string) => {
     const r = await api.delete(`${prefix}/${id}/`)
     const success = r && r.status === 204
-    if (success && log) $message.success(`成功删除 ${log}`)
+    if (success && log) $message.success(log)
     return success
   }
 
   const create = async <D = SARecord>(data: D, log?: string) => {
     const r = await api.post<T>(`${prefix}/`, data)
     const success = r.data.id
-    if (success && log) $message.success(`成功创建 ${log}`)
+    if (success && log) $message.success(log)
     return r.data
   }
 
   const update = async (id: number | string, data: Partial<T> | FormData, log?: string) => {
     const r = await api.patch<T>(`${prefix}/${id}/`, data)
     const success = r.data.id
-    if (success && log) $message.success(`成功更新 ${log}`)
+    if (success && log) $message.success(log)
     return r.data
   }
 
@@ -65,7 +66,7 @@ export function getRest<T extends { id: number }>(
     prefix,
     axios: api,
     detailUrl: (id: number | string) => `${prefix}/${id}/`,
-    customUrl: (action?: string) => `${prefix}/${action}`,
+    customUrl: (action?: string) => `${prefix}/${action}/`,
     apiset: {
       /** 一次性获取所有数据 */
       list,

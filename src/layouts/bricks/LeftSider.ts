@@ -1,6 +1,6 @@
 import { NIcon, MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
-import { useUserStore } from '$/site/user'
+// import { useUserStore } from '$/site/user'
 import IUser from '~icons/ph/folder-simple-user-thin'
 
 export const renderIcon = (icon: VueComponent) => {
@@ -18,19 +18,16 @@ const adminOptions: MenuOption[] = [
   {
     key: 'admin',
     icon: renderIcon(IUser),
-    label: renderLabelRouter('管理员', ''),
+    label: renderLabelRouter('权限管理', ''),
     children: [
-      {
-        key: 'admin-users',
-        icon: renderIcon(IUser),
-        label: renderLabelRouter('用户列表', '/admin/users'),
-      },
+      { key: 'admin-users', icon: renderIcon(IUser), label: renderLabelRouter('用户列表', '/admin/users') },
+      { key: 'admin-roles', icon: renderIcon(IUser), label: renderLabelRouter('角色列表', '/admin/roles') },
     ],
   },
 ]
 
 export function useOptions() {
-  const userStore = useUserStore()
+  // const userStore = useUserStore()
   const options = computed(() => {
     // return userStore.profile?.is_superuser ? [...baseOptions, ...adminOptions] : baseOptions
     return [...baseOptions, ...adminOptions]

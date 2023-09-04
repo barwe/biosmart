@@ -1,13 +1,14 @@
 import axios, { AxiosRequestHeaders } from 'axios'
+import { useUserStore } from '@/store/site/user'
 
 const instance = axios.create({ baseURL: '/api' })
 
 instance.interceptors.request.use(async config => {
   if (!config.headers) config.headers = {} as AxiosRequestHeaders
-  // const site = useSiteStore()
-  // if (site.userToken) {
-  //   config.headers.Authorization = `Token ${site.userToken}`
-  // }
+  const store = useUserStore()
+  if (store.isLogin) {
+    config.headers.Authorization = `Token ${store.token}`
+  }
   return config
 })
 

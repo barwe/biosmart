@@ -1,10 +1,14 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
+  { name: 'login', path: '/login', component: () => import('#/login.vue'), meta: { public: true } },
   {
     path: '/',
     component: () => import('@/layouts/default.vue'),
-    children: [{ path: 'admin/users', component: () => import('#/admin/users.vue') }],
+    children: [
+      { path: 'admin/users', component: () => import('#/admin/users.vue') },
+      { path: 'admin/roles', component: () => import('#/admin/roles.vue') },
+    ],
   },
 ]
 
