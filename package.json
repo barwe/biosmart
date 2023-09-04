@@ -14,9 +14,22 @@
   "devDependencies": {
     "@types/node": "^20.5.9",
     "@vitejs/plugin-vue": "^4.2.3",
+    "prettier": "^3.0.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vue-router": "^4.2.4",
     "vue-tsc": "^1.8.5"
+  },
+  "prettier": {
+    "semi": false,
+    "useTabs": false,
+    "tabWidth": 2,
+    "endOfLine": "lf",
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "trailingComma": "es5",
+    "bracketSpacing": true,
+    "vueIndentScriptAndStyle": false,
+    "htmlWhitespaceSensitivity": "ignore"
   }
 }

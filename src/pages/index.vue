@@ -5,9 +5,9 @@ const count = ref(0)
 </script>
 
 <template>
-<div>
+  <div>
     pages index
     <button type="button" @click="count++">count is {{ count }}</button>
-</div>
+  </div>
 </template>
 
