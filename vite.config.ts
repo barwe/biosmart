@@ -18,7 +18,13 @@ import { viteMockServe as mock } from 'vite-plugin-mock'
 
 const api = () =>
   AutoImport({
-    imports: ['vue', 'vue-router'],
+    imports: [
+      'vue',
+      'vue-router',
+      { 'vue-request': ['useRequest'] },
+      { '@vueuse/core': ['watchOnce', 'onKeyStroke'] },
+      { lodash: ['keys', 'values', 'entries', 'assign', 'pick', 'omit', 'debounce', 'isNil', 'isEmpty', 'cloneDeep'] },
+    ],
     dts: 'src/types/auto-import.d.ts',
     eslintrc: {
       enabled: true,
