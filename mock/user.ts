@@ -1,8 +1,8 @@
-import { MockMethod } from 'vite-plugin-mock'
+import { mock } from './utils'
 
-const list: MockMethod[] = [
+export default mock([
   {
-    url: '/api/users',
+    url: '/api/users/',
     method: 'get',
     response: () => ({
       token: 'xxxxxxxxxxxxxx',
@@ -12,6 +12,4 @@ const list: MockMethod[] = [
       },
     }),
   },
-]
-
-export default list
+])

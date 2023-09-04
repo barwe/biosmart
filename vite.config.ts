@@ -1,5 +1,5 @@
 import path from 'path'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -14,7 +14,7 @@ import IconsResolver from 'unplugin-icons/resolver'
 // https://github.com/windicss/vite-plugin-windicss
 import windicss from 'vite-plugin-windicss'
 // https://github.com/vbenjs/vite-plugin-mock
-import { viteMockServe } from 'vite-plugin-mock'
+import { viteMockServe as mock } from 'vite-plugin-mock'
 
 const api = () =>
   AutoImport({
@@ -33,15 +33,27 @@ const components = () =>
     resolvers: [NaiveUiResolver(), IconsResolver()],
   })
 
-const mock = () => viteMockServe({ enable: true, mockPath: 'mock', logger: true })
-
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [vue(), api(), components(), icons(), windicss(), mock()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-      '#': path.resolve(__dirname, 'src', 'pages'),
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd())
+  return {
+    plugins: [vue(), api(), components(), icons(), windicss(), mock()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+        '#': path.resolve(__dirname, 'src', 'pages'),
+      },
     },
-  },
+    server: {
+      host: env.VITE_HOST!,
+      port: parseInt(env.VITE_PORT!),
+      proxy: {
+        '/api': {
+          target: env.VITE_BASE_API!,
+          changeOrigin: true,
+          rewrite: p => p.replace(/^\/api/, ''),
+        },
+      },
+    },
+  }
 })
