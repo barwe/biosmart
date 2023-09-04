@@ -48,6 +48,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': path.resolve(__dirname, 'src'),
         '#': path.resolve(__dirname, 'src', 'pages'),
+        $: path.resolve(__dirname, 'src', 'store'),
       },
     },
     server: {
@@ -57,7 +58,7 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: env.VITE_BASE_API!,
           changeOrigin: true,
-          rewrite: p => p.replace(/^\/api/, ''),
+          rewrite: p => (env.VITE_REPLACE === 'false' ? p : p.replace(/^\/api/, '')),
         },
       },
     },

@@ -1,6 +1,5 @@
 .env*
 .mock*
 *ignore
-*rc
 *.svg
 pnpm-lock.yaml

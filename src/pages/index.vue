@@ -1,19 +1,10 @@
 <script setup lang="ts">
-import { useThemeStore } from '@/store/site/theme'
-import { userApi } from '@/api'
-
-const themeStore = useThemeStore()
-
-const click = () => $message.info('666')
-
-userApi.list()
+// interface Props {}
+// const props = defineProps<Props>()
+// const props = withDefaults(defineProps<Props>(), {})
+// const emit = defineEmits([])
 </script>
 
 <template>
-  <div class="fy-c sx-1">
-    <n-switch v-model:value="themeStore.dark" />
-    <n-button @click="click">INFO</n-button>
-    <i-mdi-ab-testing />
-  </div>
+  <div>666</div>
 </template>
-

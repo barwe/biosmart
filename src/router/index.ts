@@ -3,7 +3,8 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('#/index.vue'),
+    component: () => import('@/layouts/default.vue'),
+    children: [{ path: 'admin/users', component: () => import('#/admin/users.vue') }],
   },
 ]
 

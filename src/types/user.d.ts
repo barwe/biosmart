@@ -1,4 +1,5 @@
 declare interface UserRecord {
+  id: number
   username: string
   first_name: string
   last_name: string
@@ -9,4 +10,6 @@ declare interface UserRecord {
   is_active: boolean
   date_joined: string
   last_login: string
+
+  avatar: string
 }
