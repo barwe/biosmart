@@ -1,5 +1,8 @@
 {
   // Recommend to merge this json file to your .vscode/settings.json
+  "files.exclude": {
+    "**/auto-*": true
+  },
   "[jsonc]": {
     "editor.tabSize": 2,
     "editor.formatOnSave": true,

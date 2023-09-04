@@ -10,6 +10,9 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 // https://icon-sets.iconify.design/
 import icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
+// https://windicss.org/
+// https://github.com/windicss/vite-plugin-windicss
+import windicss from 'vite-plugin-windicss'
 
 const api = () =>
   AutoImport({
@@ -30,7 +33,7 @@ const components = () =>
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), api(), components(), icons()],
+  plugins: [vue(), api(), components(), icons(), windicss()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

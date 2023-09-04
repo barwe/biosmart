@@ -24,8 +24,10 @@
     "unplugin-icons": "^0.17.0",
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.4.5",
+    "vite-plugin-windicss": "^1.9.1",
     "vue-router": "^4.2.4",
-    "vue-tsc": "^1.8.5"
+    "vue-tsc": "^1.8.5",
+    "windicss": "^3.5.6"
   },
   "prettier": {
     "semi": false,
