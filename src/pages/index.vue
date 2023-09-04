@@ -4,6 +4,7 @@ import { useThemeStore } from '@/store/site/theme'
 const themeStore = useThemeStore()
 
 const click = () => $message.info('666')
+
 </script>
 
 <template>
