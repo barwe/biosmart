@@ -31,5 +31,5 @@ const loadIntercepts = () => {
 
 export const mock = (data: MockMethod[]) => {
   const intercepts = loadIntercepts()
-  return data.filter(d => intercepts.has(d.url))
+  return data.filter(d => intercepts.has(`${d.method?.toUpperCase()} ${d.url}`))
 }
