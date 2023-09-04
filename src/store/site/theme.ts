@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
 import { darkTheme, lightTheme, GlobalThemeOverrides } from 'naive-ui'
 
 const lightThemeOverrides: GlobalThemeOverrides = {

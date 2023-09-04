@@ -7,7 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, provide, ref } from 'vue'
 import { NConfigProvider, NGlobalStyle, NBackTop } from 'naive-ui'
 import { useThemeStore } from '@/store/site/theme'
 
