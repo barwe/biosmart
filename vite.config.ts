@@ -3,8 +3,13 @@ import { defineConfig } from 'vite'
 
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
+// https://github.com/unplugin/unplugin-vue-components
 import AutoComponents from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+// https://github.com/unplugin/unplugin-icons
+// https://icon-sets.iconify.design/
+import icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
 
 const api = () =>
   AutoImport({
@@ -20,12 +25,12 @@ const api = () =>
 const components = () =>
   AutoComponents({
     dts: 'src/types/auto-components.d.ts',
-    resolvers: [NaiveUiResolver()],
+    resolvers: [NaiveUiResolver(), IconsResolver()],
   })
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), api(), components()],
+  plugins: [vue(), api(), components(), icons()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

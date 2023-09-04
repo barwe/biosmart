@@ -21,7 +21,8 @@
     "paths": {
       "@/*": ["src/*"],
       "#/*": ["src/pages/*"]
-    }
+    },
+    "types": ["unplugin-icons/types/vue3"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [
