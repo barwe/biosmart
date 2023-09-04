@@ -13,6 +13,8 @@ import IconsResolver from 'unplugin-icons/resolver'
 // https://windicss.org/
 // https://github.com/windicss/vite-plugin-windicss
 import windicss from 'vite-plugin-windicss'
+// https://github.com/vbenjs/vite-plugin-mock
+import { viteMockServe } from 'vite-plugin-mock'
 
 const api = () =>
   AutoImport({
@@ -31,9 +33,11 @@ const components = () =>
     resolvers: [NaiveUiResolver(), IconsResolver()],
   })
 
+const mock = () => viteMockServe({ enable: true, mockPath: 'mock', logger: true })
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), api(), components(), icons(), windicss()],
+  plugins: [vue(), api(), components(), icons(), windicss(), mock()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

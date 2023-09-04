@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useThemeStore } from '@/store/site/theme'
+import { userApi } from '@/api'
 
 const themeStore = useThemeStore()
 
 const click = () => $message.info('666')
 
+userApi.list()
 </script>
 
 <template>
