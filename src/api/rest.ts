@@ -8,6 +8,7 @@ type PagedResponseData<T> = {
 }
 
 interface QueryParams {
+  [x: string]: any
   fields?: string[]
 }
 

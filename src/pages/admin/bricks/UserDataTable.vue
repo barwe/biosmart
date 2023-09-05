@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { NButton, NTime, NSwitch, DataTableColumn } from 'naive-ui'
+import { NButton, NTime, NSwitch, DataTableColumn, NPopconfirm } from 'naive-ui'
 import BrEditableText from '@/components/BrEditableText.vue'
 import BrTooltip from '@/components/BrTooltip.vue'
 
 withDefaults(defineProps<{ dataList: UserRecord[] }>(), { dataList: () => [] })
-const emit = defineEmits(['save', 'password', 'permission', 'destroy'])
+const emit = defineEmits(['save', 'password', 'roles', 'destroy'])
 
 const columns: DataTableColumn<UserRecord>[] = [
   { title: 'ID', key: 'id', align: 'center' },
@@ -60,8 +60,19 @@ const columns: DataTableColumn<UserRecord>[] = [
       h('div', { class: 'fx-c sx-2' }, [
         h(NButton, { type: 'primary', size: 'small', onClick: () => emit('save', { ...row }) }, () => '保存'),
         h(NButton, { type: 'warning', size: 'small', onClick: () => emit('password', { ...row }) }, () => '密码'),
-        h(NButton, { type: 'info', size: 'small', onClick: () => emit('permission', { ...row }) }, () => '权限'),
-        h(NButton, { size: 'small', type: 'error', onClick: () => emit('destroy', { ...row }) }, () => '删除'),
+        h(NButton, { type: 'info', size: 'small', onClick: () => emit('roles', { ...row }) }, () => '角色'),
+        h(
+          NPopconfirm,
+          {
+            positiveText: '确认',
+            negativeText: '取消',
+            onPositiveClick: () => emit('destroy', { ...row }),
+          },
+          {
+            trigger: () => h(NButton, { size: 'small', type: 'error' }, () => '删除'),
+            default: () => '确定删除吗？',
+          }
+        ),
       ]),
   },
 ]

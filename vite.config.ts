@@ -23,7 +23,22 @@ const api = () =>
       'vue-router',
       { 'vue-request': ['useRequest'] },
       { '@vueuse/core': ['watchOnce', 'onKeyStroke'] },
-      { lodash: ['keys', 'values', 'entries', 'assign', 'pick', 'omit', 'debounce', 'isNil', 'isEmpty', 'cloneDeep'] },
+      {
+        lodash: [
+          'has',
+          'keys',
+          'values',
+          'entries',
+          'assign',
+          'pick',
+          'omit',
+          'debounce',
+          'isNil',
+          'isEmpty',
+          'cloneDeep',
+        ],
+      },
+      { '@/store/site/breadcrumb': ['breadcrumb'] },
     ],
     dts: 'src/types/auto-import.d.ts',
     eslintrc: {

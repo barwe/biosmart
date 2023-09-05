@@ -20,8 +20,8 @@ const adminOptions: MenuOption[] = [
     icon: renderIcon(IUser),
     label: renderLabelRouter('权限管理', ''),
     children: [
-      { key: 'admin-users', icon: renderIcon(IUser), label: renderLabelRouter('用户列表', '/admin/users') },
-      { key: 'admin-roles', icon: renderIcon(IUser), label: renderLabelRouter('角色列表', '/admin/roles') },
+      { key: 'admin-users', icon: renderIcon(IUser), label: renderLabelRouter('用户', '/admin/users') },
+      { key: 'admin-roles', icon: renderIcon(IUser), label: renderLabelRouter('角色', '/admin/roles') },
     ],
   },
 ]

@@ -30,6 +30,6 @@ const alive = ref(true)
 
 window.reload = () => {
   alive.value = false
-  nextTick(() => (alive.value = true))
+  setTimeout(() => nextTick(() => (alive.value = true)), 200)
 }
 </script>

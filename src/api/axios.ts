@@ -22,6 +22,7 @@ instance.interceptors.response.use(
     }
   },
   error => {
+    console.log(error.response.data)
     const { message } = error.response.data ?? {}
     $message.error(message, { duration: 10000, closable: true })
     return Promise.resolve(undefined)

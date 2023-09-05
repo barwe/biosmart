@@ -10,6 +10,4 @@ declare interface UserRecord {
   is_active: boolean
   date_joined: string
   last_login: string
-
-  avatar: string
 }

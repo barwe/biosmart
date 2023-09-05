@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { isInvalidForm } from '@/utils/form'
-// interface Props {}
-// const props = defineProps<Props>()
-// const props = withDefaults(defineProps<Props>(), {})
 const emit = defineEmits(['submit'])
-
 const show = ref(false)
-
 const formRef = ref<FormInst>()
 const form = ref({
   username: '',
@@ -19,13 +14,11 @@ const form = ref({
   first_name: '',
   last_name: '',
 })
-
 const rules: FormRules = {
-  username: [{ required: true, message: '用户名不能为空' }],
+  username: { required: true, message: '用户名不能为空' },
   email: { required: true, message: '邮箱不能为空' },
   password: { required: true, message: '密码不能为空' },
 }
-
 const submit = async () => {
   if (await isInvalidForm(formRef)) return
   emit('submit', omit(form.value, ['confirmedPassword']))
