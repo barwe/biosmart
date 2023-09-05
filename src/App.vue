@@ -27,9 +27,9 @@ const ApiMessage = defineComponent({
 const themeStore = useThemeStore()
 
 const alive = ref(true)
-const reload = () => {
+
+window.reload = () => {
   alive.value = false
   nextTick(() => (alive.value = true))
 }
-provide('reload', reload)
 </script>
