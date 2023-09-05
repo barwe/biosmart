@@ -8,7 +8,7 @@ const isMobileMedia = computed(() => windowSize.width.value < 500)
 const labelPlacement = computed(() => (isMobileMedia.value ? 'top' : 'left'))
 
 const formRef = ref<FormInst>()
-const form = reactive({ username: 'admin', password: 'admin1234@admin4321' })
+const form = reactive({ username: 'admin', password: 'admin1234@admin5678' })
 const rules: FormRules = {
   username: { required: true, message: '请输入用户名' },
   password: { required: true, message: '请输入密码' },

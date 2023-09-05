@@ -20,8 +20,7 @@ export function getRest<T extends { id: number }>(
 
   const list = async (params?: QueryParams) => {
     const r = await api.get<T[]>(`${prefix}/`, { params })
-    // return r.data
-    return r.data.data.rows
+    return r.data
   }
 
   const predata = async <R = SARecord>(keys?: string[]) => {

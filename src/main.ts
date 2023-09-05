@@ -27,6 +27,7 @@ router.beforeEach((to, _, next) => {
 app.use(router)
 
 import { createPinia } from 'pinia'
+// https://seb-l.github.io/pinia-plugin-persist/
 import piniaPersist from 'pinia-plugin-persist'
 const pinia = createPinia()
 pinia.use(piniaPersist)
