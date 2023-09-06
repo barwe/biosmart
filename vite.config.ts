@@ -39,6 +39,7 @@ const api = () =>
         ],
       },
       { '@/store/site/breadcrumb': ['breadcrumb'] },
+      { '@/composables/vue-ext': ['computableRef'] },
     ],
     dts: 'src/types/auto-import.d.ts',
     eslintrc: {

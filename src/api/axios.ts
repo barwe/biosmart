@@ -1,5 +1,6 @@
 import axios, { AxiosRequestHeaders } from 'axios'
 import { useUserStore } from '@/store/site/user'
+import { isString } from 'lodash'
 
 const instance = axios.create({ baseURL: '/api' })
 
@@ -12,6 +13,10 @@ instance.interceptors.request.use(async config => {
   return config
 })
 
+const showErrorMessage = (msg: string) => {
+  $message.error(msg, { duration: 10000, closable: true })
+}
+
 instance.interceptors.response.use(
   response => {
     const status = response.status.toString()
@@ -22,9 +27,13 @@ instance.interceptors.response.use(
     }
   },
   error => {
-    console.log(error.response.data)
-    const { message } = error.response.data ?? {}
-    $message.error(message, { duration: 10000, closable: true })
+    // 后端返回的错误提示一般位于 message 或者 detail 中
+    const { message, detail } = error.response.data
+    if (message) showErrorMessage(message)
+    if (detail) {
+      if (isString(detail)) showErrorMessage(detail)
+      else showErrorMessage(JSON.stringify(detail))
+    }
     return Promise.resolve(undefined)
   }
 )

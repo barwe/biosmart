@@ -1,8 +1,5 @@
-declare interface RoleRecord {
-  id: number
+declare interface RoleRecord extends BaseRecord<RoleRecord> {
   name: string
   description: string
   users: number[]
-  created_at: string
-  updated_at: string
 }

@@ -3,17 +3,17 @@ import { getRest } from './rest'
 
 interface AuthResult {
   token: string
-  user: UserRecord
+  user: DrfUser
 }
 
-const { apiset, customUrl } = getRest<UserRecord>(axios, 'users')
+const { apiset, customUrl } = getRest<DrfUser>(axios, 'users')
 
-const login = async (data: Pick<UserRecord, 'username' | 'password'>) => {
+const login = async (data: Pick<DrfUser, 'username' | 'password'>) => {
   const r = await axios.post(customUrl('login'), data)
   return r?.data as AuthResult
 }
 
-const register = async (data: Pick<UserRecord, 'username' | 'password' | 'email'>) => {
+const register = async (data: Partial<DrfUser>) => {
   const r = await axios.post(customUrl('register'), data)
   return r?.data as AuthResult
 }

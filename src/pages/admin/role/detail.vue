@@ -23,7 +23,6 @@ const { data: role } = useRequest(async () => {
   return rd
 })
 
-let rawDict: PermissionRecord[] = []
 const dataList = ref<PermissionRecord[]>([])
 
 const dataListByModel = computed(() => {
@@ -48,19 +47,18 @@ const tabdata = computed(() => {
 const tab = ref('')
 const tabModelId = computed(() => tabdata.value.find(d => d.name === tab.value)?.modelId)
 
-permissionApi.list({ Q_role: 1 }).then(data => {
-  dataList.value = data
-  data.forEach(d => (rawDict[d.id] = cloneDeep(d)))
+useRequest(async () => {
+  const list = await permissionApi.list({ Q_role: 1 })
+  list.forEach(d => (d._raw = cloneDeep(d)))
+  dataList.value = list
   if (tabdata.value.length > 0) tab.value = tabdata.value[0].name
 })
 
 const { data: resourceList } = useRequest(() => permissionApi.getResourceOptions())
 
 const save = (row: PermissionRecord) => {
-  const raw = rawDict[row.id]
   const allowed = ['can_view', 'can_edit', 'can_delete']
-  const updated = getUpdatedSubObject(pick(row, allowed), pick(raw, allowed))
-  console.log(updated)
+  const updated = getUpdatedSubObject(pick(row, allowed), pick(row._raw, allowed))
   if (isEmpty(updated)) return
   if (!row.can_view && (row.can_edit || row.can_delete)) {
     updated.can_edit = false
@@ -69,8 +67,7 @@ const save = (row: PermissionRecord) => {
     setTimeout(() => permissionApi.update(row.id, updated), 500)
     return
   }
-  rawDict[row.id] = cloneDeep(row)
-  permissionApi.update(row.id, updated, '更新成功')
+  permissionApi.update(row.id, updated, '更新成功').then(reload)
 }
 
 const create = async (data: Partial<PermissionRecord>) => {

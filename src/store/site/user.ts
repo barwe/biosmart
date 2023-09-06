@@ -12,7 +12,7 @@ export const useUserStore = defineStore(
     const token = ref('')
     const isLogin = computed(() => token.value)
 
-    const user = ref<UserRecord>()
+    const user = ref<DrfUser>()
     const userId = computed(() => user.value?.id)
 
     const favorites = ref<FavoriteItem[]>([])
@@ -31,7 +31,7 @@ export const useUserStore = defineStore(
       user.value = undefined
     }
 
-    const update = async (data: Partial<UserRecord>, log?: string) => {
+    const update = async (data: Partial<DrfUser>, log?: string) => {
       if (!user.value?.id) return undefined
       user.value = await userApi.update(user.value.id, data, log)
       return user
