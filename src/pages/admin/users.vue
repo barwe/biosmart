@@ -5,11 +5,13 @@ import BrEditableText from '@/components/BrEditableText.vue'
 import BrTooltip from '@/components/BrTooltip.vue'
 import CreateUser from './bricks/CreateUser.vue'
 import UserModelButton from './bricks/UserModelButton.vue'
+import UserRoleButton from './bricks/UserRoleButton.vue'
 import { userApi, userPermissionApi } from '@/api'
 
 const { data: rawdata } = useRequest(userPermissionApi.list)
 const userList = computableRef(() => rawdata.value?.users, [])
 const models = computed(() => rawdata.value?.models ?? [])
+const roles = computed(() => rawdata.value?.roles ?? [])
 
 const create = (data: Partial<DrfUser>) => {
   userApi.register(data).then(() => {
@@ -17,35 +19,81 @@ const create = (data: Partial<DrfUser>) => {
     reload()
   })
 }
-const saveBaseInfo = (user: DrfUser) => console.log(user)
 const resetPassword = (user: DrfUser) => console.log(user)
-const changeRoles = (user: DrfUser) => console.log(user)
 const destroy = (row: DrfUser) => {
   userApi.destroy(row.id, `用户 ${row.username} 已删除`).then(reload)
+}
+const update = (row: DrfUser, k: string, v: string | number | boolean) => {
+  const d = { [k]: v }
+  userApi.update(row.id, d).then(() => {
+    assign(row, d)
+  })
+}
+
+const PermissionButton = (row: DrfUser) => {
+  return h(
+    BrTooltip,
+    { content: '修改用户对模型的操作权限' },
+    { default: () => h(UserModelButton, { user: row, models: models.value }) }
+  )
+}
+
+const ResetPasswordButton = (row: DrfUser) => {
+  return h(
+    BrTooltip,
+    { content: '重置用户密码' },
+    {
+      default: () =>
+        h(NButton, { type: 'warning', size: 'small', disabled: true, onClick: () => resetPassword(row) }, () => '密码'),
+    }
+  )
+}
+
+const ChangeUsername = (row: DrfUser) => {
+  return h(
+    BrTooltip,
+    { content: '点击修改用户名' },
+    {
+      default: () => h(BrEditableText, { key: row.id, value: row.username, change: v => update(row, 'username', v) }),
+    }
+  )
+}
+
+const ChangeEmail = (row: DrfUser) => {
+  return h(
+    BrTooltip,
+    { content: '点击修改邮箱' },
+    { default: () => h(BrEditableText, { value: row.email, change: v => update(row, 'email', v) }) }
+  )
+}
+
+const ChangeUserRoleButton = (row: DrfUser) => {
+  return h(
+    BrTooltip,
+    { content: '修改用户角色（数据操作权限）' },
+    { default: () => h(UserRoleButton, { user: row, roles: roles.value }) }
+  )
+}
+
+const DeleteButton = (row: DrfUser) => {
+  return h(
+    NPopconfirm,
+    {
+      positiveText: '确认',
+      negativeText: '取消',
+      onPositiveClick: () => destroy(row),
+    },
+    {
+      trigger: () => h(NButton, { size: 'small', type: 'error' }, () => '删除'),
+      default: () => '确定删除吗？',
+    }
+  )
 }
 
 const columns: DataTableColumn<DrfUser>[] = [
   { title: 'ID', key: 'id', align: 'center' },
-  {
-    title: '用户名',
-    key: 'username',
-    render: row =>
-      h(
-        BrTooltip,
-        { content: '点击修改用户名' },
-        { default: () => h(BrEditableText, { key: row.id, value: row.username, change: v => (row.username = v) }) }
-      ),
-  },
-  {
-    title: '邮箱',
-    key: 'email',
-    render: row =>
-      h(
-        BrTooltip,
-        { content: '点击修改邮箱' },
-        { default: () => h(BrEditableText, { value: row.email, change: v => (row.email = v) }) }
-      ),
-  },
+  { title: '用户名', key: 'username', render: ChangeUsername },
+  { title: '邮箱', key: 'email', render: ChangeEmail },
   {
     title: '最近登录',
     key: 'last_login',
@@ -62,13 +110,13 @@ const columns: DataTableColumn<DrfUser>[] = [
     title: '启用账户',
     key: 'is_active',
     align: 'center',
-    render: row => h(NSwitch, { value: row.is_active, onUpdateValue: v => (row.is_active = v) }),
+    render: row => h(NSwitch, { value: row.is_active, onUpdateValue: v => update(row, 'is_active', v) }),
   },
   {
     title: '管理员',
-    key: 'is_superuser',
+    key: 'is_staff',
     align: 'center',
-    render: row => h(NSwitch, { value: row.is_superuser, onUpdateValue: v => (row.is_superuser = v) }),
+    render: row => h(NSwitch, { value: row.is_staff, onUpdateValue: v => update(row, 'is_staff', v) }),
   },
   {
     title: '操作',
@@ -76,77 +124,10 @@ const columns: DataTableColumn<DrfUser>[] = [
     align: 'center',
     render: row =>
       h('div', { class: 'fx-c sx-2' }, [
-        h(
-          BrTooltip,
-          { content: '保存用户基本信息' },
-          {
-            default: () =>
-              h(
-                NButton,
-                {
-                  type: 'primary',
-                  size: 'small',
-                  onClick: () => saveBaseInfo(row),
-                },
-                () => '保存'
-              ),
-          }
-        ),
-        h(
-          BrTooltip,
-          { content: '重置用户密码' },
-          {
-            default: () =>
-              h(
-                NButton,
-                {
-                  type: 'warning',
-                  size: 'small',
-                  onClick: () => resetPassword(row),
-                },
-                () => '密码'
-              ),
-          }
-        ),
-        h(
-          BrTooltip,
-          { content: '修改用户对模型的操作权限' },
-          {
-            default: () =>
-              h(UserModelButton, {
-                user: row,
-                models: models.value,
-              }),
-          }
-        ),
-        h(
-          BrTooltip,
-          { content: '修改用户角色（数据操作权限）' },
-          {
-            default: () =>
-              h(
-                NButton,
-                {
-                  type: 'info',
-                  size: 'small',
-                  onClick: () => changeRoles(row),
-                },
-                () => '角色'
-              ),
-          }
-        ),
-        h(
-          NPopconfirm,
-          {
-            positiveText: '确认',
-            negativeText: '取消',
-            onPositiveClick: () => destroy(row),
-          },
-          {
-            trigger: () => h(NButton, { size: 'small', type: 'error' }, () => '删除'),
-            default: () => '确定删除吗？',
-          }
-        ),
+        ResetPasswordButton(row),
+        PermissionButton(row),
+        ChangeUserRoleButton(row),
+        DeleteButton(row),
       ]),
   },
 ]

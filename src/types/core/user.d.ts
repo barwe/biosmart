@@ -15,7 +15,7 @@ declare interface DrfUser {
   email: string
   password: string
   is_superuser: boolean
-  is_stuff: boolean
+  is_staff: boolean
   is_active: boolean
   date_joined: string
   last_login: string
@@ -25,6 +25,8 @@ declare interface DrfUser {
       [can_op: string]: boolean
     }
   }
+
+  user_roles: RoleRecord[]
 }
 
 /** 模型 */

@@ -9,11 +9,17 @@ export default {
     return rd.data as {
       users: DrfUser[]
       models: DrfModel[]
+      roles: RoleRecord[]
     }
   },
 
-  async update(user: number, model: number, operation: DrfOpType, value: DrfOpValue) {
-    const data = { user, model, operation, value }
+  async updatePermission(user: number, model: number, operation: DrfOpType, value: DrfOpValue) {
+    const data = { type: 'permission', user, model, operation, value }
+    await axios.patch(customUrl('update'), data)
+  },
+
+  async updateRole(user: number, roles: number[]) {
+    const data = { type: 'role', user, roles }
     await axios.patch(customUrl('update'), data)
   },
 }

@@ -20,7 +20,7 @@ const data = computableRef(() => {
 /** 将用户 u 对模型 m 的 k 权限设置为 v */
 const update = (m: number, op: DrfOpType, v: DrfOpValue) => {
   const val = v ? 'enabled' : 'disabled'
-  userPermissionApi.update(props.user.id, m, op, val)
+  userPermissionApi.updatePermission(props.user.id, m, op, val)
 }
 
 const getRender = (op: DrfOpType) => {
