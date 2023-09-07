@@ -1,4 +1,5 @@
 import type { AxiosInstance } from 'axios'
+import axios from 'axios'
 
 type PagedResponseData<T> = {
   page: number

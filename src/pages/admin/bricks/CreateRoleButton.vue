@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { roleApi } from '@/api'
 import { isInvalidForm } from '@/utils/form'
 
 defineProps<{ userOptions?: LVRecord<number>[] }>()
-const emit = defineEmits(['submit'])
 
 const show = ref(false)
 const formRef = ref<FormInst>()
@@ -10,8 +10,10 @@ const form = ref({ name: '', description: '', users: [] as number[] })
 const rules: FormRules = { name: { required: true, message: '角色名称不能为空' } }
 const submit = async () => {
   if (await isInvalidForm(formRef)) return
-  emit('submit', cloneDeep(form.value))
-  show.value = false
+  roleApi.create(form.value, `成功创建角色 ${form.value.name}`).then(() => {
+    show.value = false
+    reload()
+  })
 }
 </script>
 

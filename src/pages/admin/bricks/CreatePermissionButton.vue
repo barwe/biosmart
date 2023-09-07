@@ -1,13 +1,14 @@
 <script setup lang="ts">
+import { permissionApi } from '@/api'
 import { ResourceListItem } from '@/api/permission'
 import { isInvalidForm } from '@/utils/form'
 
 interface Props {
+  roleId: number
   defaultModel?: number
   resourceList?: ResourceListItem[]
 }
 const props = defineProps<Props>()
-const emit = defineEmits(['submit'])
 
 const getDefaultValue = () => ({
   content_type: props.defaultModel,
@@ -41,8 +42,14 @@ const open = () => {
 
 const submit = async () => {
   if (await isInvalidForm(formRef)) return
-  emit('submit', cloneDeep(form.value))
-  show.value = false
+  try {
+    const req = { ...form.value, role: props.roleId }
+    await permissionApi.create(req, '创建成功')
+    // show.value = false
+    reload()
+  } catch {
+    form.value = getDefaultValue()
+  }
 }
 </script>
 

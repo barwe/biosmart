@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import { userApi } from '@/api'
 import { isInvalidForm } from '@/utils/form'
-const emit = defineEmits(['submit'])
+
 const show = ref(false)
 const formRef = ref<FormInst>()
 const form = ref({
   username: '',
   email: '',
   password: '',
-  confirmedPassword: '',
   is_active: true,
   is_staff: false,
   is_superuser: false,
@@ -21,8 +21,11 @@ const rules: FormRules = {
 }
 const submit = async () => {
   if (await isInvalidForm(formRef)) return
-  emit('submit', omit(form.value, ['confirmedPassword']))
-  show.value = false
+  userApi.create(form.value).then(() => {
+    $message.success(`成功创建用户 ${form.value.username}`)
+    show.value = false
+    reload()
+  })
 }
 </script>
 
@@ -41,9 +44,6 @@ const submit = async () => {
           <n-form-item label="密码" path="password">
             <n-input type="password" v-model:value="form.password" placeholder="请输入密码" />
           </n-form-item>
-          <!-- <n-form-item label="确认密码">
-            <n-input type="password" v-model:value="form.confirmedPassword" placeholder="请确认密码" />
-          </n-form-item> -->
           <n-form-item label="First Name">
             <n-input v-model:value="form.first_name" placeholder="" />
           </n-form-item>
@@ -55,9 +55,6 @@ const submit = async () => {
           </n-form-item>
           <n-form-item label="设为管理员" :show-feedback="false">
             <n-switch v-model:value="form.is_staff" />
-          </n-form-item>
-          <n-form-item label="设为超级管理员" :show-feedback="false">
-            <n-switch v-model:value="form.is_superuser" />
           </n-form-item>
         </n-form>
         <template #footer>

@@ -1,58 +1,86 @@
 <script setup lang="ts">
 breadcrumb.set([{ title: '权限', route: '' }, '角色'])
+import { DataTableColumn, NButton, NPopconfirm } from 'naive-ui'
+import { renderInput } from '@/components/db-render/text'
+import { renderDatetimeText } from '@/components/db-render/datetime'
+import CreateRoleButton from './bricks/CreateRoleButton.vue'
+import RoleUserButton from './bricks/RoleUserButton.vue'
+import RoleDataPermissions from './bricks/RoleDataPermissions.vue'
+import { roleApi, adminApi } from '@/api'
 
-import RoleDataTable from './bricks/RoleDataTable.vue'
-import CreateRole from './bricks/CreateRole.vue'
-import { getUpdatedSubObject } from '@/utils/object'
+const { data: rawdata } = useRequest(adminApi.listRoles)
+const { data: dataList } = computableRef(() => rawdata.value?.roles, [])
+const userOptions = computed(() => rawdata.value?.users.map(d => ({ label: d.username, value: d.id })))
 
-import { roleApi, userApi } from '@/api'
-const dataList = ref<RoleRecord[]>([])
-useRequest(async () => {
-  const list = await roleApi.list()
-  list.forEach(d => (d._raw = cloneDeep(d)))
-  dataList.value = list
-})
-const { data: userList } = useRequest(() => userApi.list({ fields: ['id', 'username'] }))
-const userOptions = computed(() => userList.value?.map(d => ({ label: d.username, value: d.id })))
-
-const create = (data: Partial<RoleRecord>) => {
-  roleApi.create(data, `成功创建角色 ${data.name}`).then(reload)
+const renderDeleteButton = (role: RoleRecord) => {
+  return h(
+    NPopconfirm,
+    {
+      positiveText: '确认',
+      negativeText: '取消',
+      onPositiveClick: () => roleApi.destroy(role.id, `角色 ${role.name} 已删除`).then(reload),
+    },
+    {
+      trigger: () => h(NButton, { size: 'small', type: 'error' }, () => '删除'),
+      default: () => '确定删除吗？',
+    }
+  )
 }
 
-const changeInfo = (row: RoleRecord) => {
-  // 允许更新的字段
-  const allowed = ['name', 'description']
-  // 发生更新的字段及其字段值
-  const updated = getUpdatedSubObject(pick(row, allowed), pick(row._raw, allowed))
-  // 没有任何需要更新的数据
-  if (isEmpty(updated)) return
-  // 执行更新，然后重载页面
-  roleApi.update(row.id, updated, `更新角色 ${row.name} 成功`).then(reload)
+const updateRole = async (role: RoleRecord, field: string, value: string | number | boolean) => {
+  const updated = { [field]: value }
+  await roleApi.update(role.id, updated)
+  assign(role, updated)
+}
+const renderRoleName = (role: RoleRecord) =>
+  renderInput(role, 'name', updateRole, { tooltip: true, translation: '角色名' })
+const renderRoleDescription = (role: RoleRecord) =>
+  renderInput(role, 'description', updateRole, { tooltip: true, translation: '描述信息' })
+const renderRoleUsersButton = (row: RoleRecord) => {
+  return h(RoleUserButton, { role: row, users: rawdata.value?.users ?? [] })
+}
+// const router = useRouter()
+// const renderRolePermsButton = (row: RoleRecord) => {
+//   return h(
+//     NButton,
+//     {
+//       type: 'success',
+//       size: 'small',
+//       onClick: () => router.push(`roles/${row.id}`),
+//     },
+//     () => '数据权限'
+//   )
+// }
+const renderDataPermission = (row: RoleRecord) => {
+  return h(RoleDataPermissions, { roleId: row.id })
 }
 
-const changeUsers = (role: RoleRecord, users: number[]) => {
-  roleApi.update(role.id, { users }, `成功更新角色 ${role.name} 关联的用户`).then(reload)
-}
-
-const changePermissions = (user: RoleRecord) => console.log(user)
-
-const destroy = (row: RoleRecord) => {
-  roleApi.destroy(row.id, `角色 ${row.name} 已删除`).then(reload)
-}
+const columns: DataTableColumn<RoleRecord>[] = [
+  { title: 'ID', key: 'id', align: 'center' },
+  { title: '角色名', key: 'name', align: 'center', render: renderRoleName },
+  { title: '描述信息', key: 'description', align: 'center', render: renderRoleDescription },
+  { title: '创建时间', key: 'created_at', align: 'center', render: row => renderDatetimeText(row, 'created_at') },
+  { title: '更新时间', key: 'updated_at', align: 'center', render: row => renderDatetimeText(row, 'updated_at') },
+  {
+    title: '操作',
+    key: 'actions',
+    align: 'center',
+    render: row =>
+      h('div', { class: 'fx-c sx-2' }, [
+        renderRoleUsersButton(row),
+        // renderRolePermsButton(row),
+        renderDataPermission(row),
+        renderDeleteButton(row),
+      ]),
+  },
+]
 </script>
 
 <template>
   <div>
     <div class="fx-l mb-2">
-      <CreateRole :user-options="userOptions" @submit="create" />
+      <CreateRoleButton :user-options="userOptions" />
     </div>
-    <RoleDataTable
-      :data-list="dataList"
-      :user-options="userOptions"
-      @save="changeInfo"
-      @users="changeUsers"
-      @permission="changePermissions"
-      @destroy="destroy"
-    />
+    <n-data-table :columns="columns" :data="dataList" :pagination="false" :bordered="false" />
   </div>
 </template>

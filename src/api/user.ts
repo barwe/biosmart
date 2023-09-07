@@ -8,14 +8,14 @@ interface AuthResult {
 
 const { apiset, customUrl } = getRest<DrfUser>(axios, 'users')
 
-const login = async (data: Pick<DrfUser, 'username' | 'password'>) => {
-  const r = await axios.post(customUrl('login'), data)
-  return r?.data as AuthResult
+export default {
+  ...apiset,
+  async login(data: Pick<DrfUser, 'username' | 'password'>) {
+    const rd = await axios.post(customUrl('login'), data)
+    return rd.data as AuthResult
+  },
+  async register(data: Partial<DrfUser>) {
+    const rd = await axios.post(customUrl('register'), data)
+    return rd.data as AuthResult
+  },
 }
-
-const register = async (data: Partial<DrfUser>) => {
-  const r = await axios.post(customUrl('register'), data)
-  return r?.data as AuthResult
-}
-
-export default { ...apiset, login, register }

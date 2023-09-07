@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DataTableColumn, NButton, NPopconfirm } from 'naive-ui'
 import { renderCheckbox } from '@/components/db-render/bool'
-import { renderDatetimeText } from '@/components/db-render/datetime'
+// import { renderDatetimeText } from '@/components/db-render/datetime'
 import { permissionApi } from '@/api'
 
 interface Props {
@@ -35,8 +35,8 @@ const columns: DataTableColumn<PermissionRecord>[] = [
   { title: '允许查看', key: 'can_view', align: 'center', render: canView },
   { title: '允许编辑', key: 'can_edit', align: 'center', render: canEdit },
   { title: '允许删除', key: 'can_delete', align: 'center', render: canDelete },
-  { title: '创建时间', key: 'created_at', align: 'center', render: row => renderDatetimeText(row, 'created_at') },
-  { title: '更新时间', key: 'updated_at', align: 'center', render: row => renderDatetimeText(row, 'updated_at') },
+  // { title: '创建时间', key: 'created_at', align: 'center', render: row => renderDatetimeText(row, 'created_at') },
+  // { title: '更新时间', key: 'updated_at', align: 'center', render: row => renderDatetimeText(row, 'updated_at') },
   {
     title: '操作',
     key: 'actions',

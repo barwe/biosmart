@@ -38,6 +38,7 @@ const api = () =>
           'cloneDeep',
         ],
       },
+      { '@/store/site/user': ['useUserStore'] },
       { '@/store/site/breadcrumb': ['breadcrumb'] },
       { '@/composables/vue-ext': ['computableRef'] },
     ],

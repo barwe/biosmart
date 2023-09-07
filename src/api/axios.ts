@@ -34,7 +34,10 @@ instance.interceptors.response.use(
       if (isString(detail)) showErrorMessage(detail)
       else showErrorMessage(JSON.stringify(detail))
     }
-    return Promise.resolve(undefined)
+    if (!message && !detail) {
+      showErrorMessage(JSON.stringify(error.response.data))
+    }
+    return Promise.reject(undefined)
   }
 )
 
